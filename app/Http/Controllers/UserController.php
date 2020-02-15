@@ -31,7 +31,7 @@ class UserController extends Controller
             ], 200);
         } else {
             return response()->json([
-                'status'    => 'error',
+                'status'    => 'fail',
                 'message'   => 'Email or password combination invalid.'
             ], 402);
         }
@@ -59,7 +59,7 @@ class UserController extends Controller
         if (!$user) {
             DB::rollback();
             return response()->json([
-                'status'    => 'error',
+                'status'    => 'fail',
                 'message'   => 'Something wrong on creating User.'
             ], 402);
         }

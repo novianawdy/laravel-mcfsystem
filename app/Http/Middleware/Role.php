@@ -21,7 +21,7 @@ class Role
         }
 
         return response()->json([
-            'status'    => 'error',
+            'status'    => 'fail',
             'message'   => 'Unauthorized.'
         ], 401);
     }

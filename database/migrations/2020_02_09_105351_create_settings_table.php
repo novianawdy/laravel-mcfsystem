@@ -19,6 +19,8 @@ class CreateSettingsTable extends Migration
             $table->string('value')->nullable();
             $table->text('value_text')->nullable();
             $table->decimal('value_decimal', 12, 2)->nullable();
+            $table->string('type')->nullable();
+            $table->timestamps();
         });
     }
 

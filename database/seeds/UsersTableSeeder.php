@@ -23,5 +23,14 @@ class UsersTableSeeder extends Seeder
             'role'              => 1
             // 'api_token'=>Hash::make(Str::random(80))
         ]);
+
+        User::create([
+            'name'              => 'IOT',
+            'email'             => 'iot@mcfsystem.com',
+            'email_verified_at' => Carbon::now(),
+            'password'          => Hash::make('mcfsystemiot'),
+            'role'              => 1
+            // 'api_token'=>Hash::make(Str::random(80))
+        ]);
     }
 }

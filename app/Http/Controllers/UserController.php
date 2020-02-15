@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -27,8 +30,49 @@ class UserController extends Controller
 
             ], 200);
         } else {
-            return response()->json(['status' => 'error', 'message' => 'Email or password combination invalid.'], 402);
+            return response()->json([
+                'status'    => 'error',
+                'message'   => 'Email or password combination invalid.'
+            ], 402);
         }
+    }
+
+    public function register(Request $request)
+    {
+        $request->validate([
+            'email'     => 'required',
+            'password'  => 'required',
+            'name'      => 'required',
+
+        ]);
+
+        DB::beginTransaction();
+
+        $user = User::create([
+            'name'              => $request->name,
+            'email'             => $request->email,
+            'email_verified_at' => Carbon::now(),
+            'password'          => Hash::make($request->password),
+            'role'              => 2
+        ]);
+
+        if (!$user) {
+            DB::rollback();
+            return response()->json([
+                'status'    => 'error',
+                'message'   => 'Something wrong on creating User.'
+            ], 402);
+        }
+
+        DB::commit();
+
+        return response()->json([
+            'status'    => 'success',
+            'result'    => [
+                'user'  => $user
+            ],
+
+        ], 200);
     }
 
     public function show()

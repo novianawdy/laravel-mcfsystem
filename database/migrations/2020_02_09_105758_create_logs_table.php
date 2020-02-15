@@ -16,7 +16,7 @@ class CreateLogsTable extends Migration
         Schema::create('logs', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->decimal('flow', 12, 2)->comment('mL/s');
-            $table->decimal('temperature', 12, 2)->comment('C');
+            $table->decimal('temperature', 12, 2)->comment('ºC');
             $table->tinyInteger('solenoid')->comment('1=On, 0=Off');
             $table->timestamps();
         });

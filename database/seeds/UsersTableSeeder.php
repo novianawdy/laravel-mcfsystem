@@ -16,11 +16,12 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         User::create([
-            'name'=> 'Super Admin',
-            'email'=> 'superadmin@mcfsystem.com',
-            'email_verified_at'=> Carbon::now(),
-            'password'=>Hash::make('mcfsystemsuper'),
-            'api_token'=>Hash::make(Str::random(80))
+            'name'              => 'Super Admin',
+            'email'             => 'superadmin@mcfsystem.com',
+            'email_verified_at' => Carbon::now(),
+            'password'          => Hash::make('mcfsystemsuper'),
+            'role'              => 1
+            // 'api_token'=>Hash::make(Str::random(80))
         ]);
     }
 }

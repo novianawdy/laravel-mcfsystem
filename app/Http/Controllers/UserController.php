@@ -19,20 +19,24 @@ class UserController extends Controller
             $user = Auth::user();
             $token =  $user->createToken('MCFSystem')->accessToken;
             return response()->json([
-                'status' => 'success',
-                'token'    => $token
-            ], $this->successStatus);
+                'status'    => 'success',
+                'result'    => [
+                    'token' => $token,
+                    'user'  => $user
+                ],
+
+            ], 200);
         } else {
-            return response()->json(['status' => 'error', 'message' => 'Email or password combination invalid.'], 401);
+            return response()->json(['status' => 'error', 'message' => 'Email or password combination invalid.'], 402);
         }
     }
 
     public function show()
     {
-        $user = User::find(Auth::user()->id);
+        $user = Auth::user();
 
         return response()->json([
-            'status'    => 'succes',
+            'status'    => 'success',
             'result'    => $user
         ], 200);
     }

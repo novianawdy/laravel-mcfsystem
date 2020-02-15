@@ -25,4 +25,5 @@ Route::group(['middleware' => ['auth:api'], 'prefix' => 'user'], function () {
 
 Route::group(['middleware' => ['auth:api'], 'prefix' => 'logs'], function () {
     Route::get('/', 'LogController@index');
+    Route::post('/', 'LogController@store');
 });

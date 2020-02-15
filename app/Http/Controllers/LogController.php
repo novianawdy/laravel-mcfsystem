@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LogController extends Controller
 {
@@ -68,6 +69,41 @@ class LogController extends Controller
         return response()->json([
             'status'    => 'success',
             'result'    => $result
+        ], 200);
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'flow'          => 'required',
+            'temperature'   => 'required',
+            'solenoid'      => 'required',
+        ]);
+
+        DB::beginTransaction();
+
+        $log = Log::create([
+            'flow'          => $request->flow,
+            'temperature'   => $request->temperature,
+            'solenoid'      => $request->solenoid,
+        ]);
+
+        if (!$log) {
+            DB::rollback();
+            return response()->json([
+                'status'    => 'fail',
+                'message'   => 'Something wrong when creating Log.'
+            ], 402);
+        }
+
+        DB::commit();
+
+        return response()->json([
+            'status'    => 'success',
+            'result'    => [
+                'log'   => $log
+            ],
+
         ], 200);
     }
 }

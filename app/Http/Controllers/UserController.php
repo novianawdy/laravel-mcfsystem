@@ -60,7 +60,7 @@ class UserController extends Controller
             DB::rollback();
             return response()->json([
                 'status'    => 'fail',
-                'message'   => 'Something wrong on creating User.'
+                'message'   => 'Something wrong when creating User.'
             ], 402);
         }
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
-use Carbon\Carbon;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -14,11 +14,11 @@ class UserController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email'     => 'required',
+            'username'  => 'required',
             'password'  => 'required'
         ]);
 
-        if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
+        if (Auth::attempt(['username' => request('username'), 'password' => request('password')])) {
             $user = Auth::user();
             $token =  $user->createToken('MCFSystem')->accessToken;
             return response()->json([
@@ -32,7 +32,7 @@ class UserController extends Controller
         } else {
             return response()->json([
                 'status'    => 'fail',
-                'message'   => 'Email or password combination invalid.'
+                'message'   => 'Username or password combination invalid.'
             ], 402);
         }
     }
@@ -40,7 +40,7 @@ class UserController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'email'     => 'required',
+            'username'  => 'required',
             'password'  => 'required',
             'name'      => 'required',
 
@@ -50,8 +50,7 @@ class UserController extends Controller
 
         $user = User::create([
             'name'              => $request->name,
-            'email'             => $request->email,
-            'email_verified_at' => Carbon::now(),
+            'username'          => $request->username,
             'password'          => Hash::make($request->password),
             'role'              => 2
         ]);

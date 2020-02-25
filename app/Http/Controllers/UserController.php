@@ -33,7 +33,7 @@ class UserController extends Controller
             return response()->json([
                 'status'    => 'fail',
                 'message'   => 'Username or password combination invalid.'
-            ], 200);
+            ], 422);
         }
     }
 
@@ -72,7 +72,7 @@ class UserController extends Controller
             return response()->json([
                 'status'    => 'fail',
                 'message'   => 'Something wrong when creating User.'
-            ], 200);
+            ], 422);
         }
 
         DB::commit();

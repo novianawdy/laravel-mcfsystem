@@ -93,7 +93,7 @@ class LogController extends Controller
             return response()->json([
                 'status'    => 'fail',
                 'message'   => 'Something wrong when creating Log.'
-            ], 402);
+            ], 200);
         }
 
         DB::commit();

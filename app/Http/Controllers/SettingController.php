@@ -61,7 +61,7 @@ class SettingController extends Controller
             return response()->json([
                 'status'    => 'fail',
                 'message'   => 'Setting key not found.'
-            ], 402);
+            ], 200);
         }
 
         DB::beginTransaction();
@@ -76,7 +76,7 @@ class SettingController extends Controller
             return response()->json([
                 'status'    => 'fail',
                 'message'   => 'Something wrong when updating Setting.'
-            ], 402);
+            ], 200);
         }
 
         DB::commit();

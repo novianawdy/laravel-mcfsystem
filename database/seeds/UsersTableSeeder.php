@@ -1,10 +1,9 @@
 <?php
 
 use App\User;
-use Carbon\Carbon;
+
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class UsersTableSeeder extends Seeder
 {
@@ -17,20 +16,16 @@ class UsersTableSeeder extends Seeder
     {
         User::create([
             'name'              => 'Super Admin',
-            'email'             => 'superadmin@mcfsystem.com',
-            'email_verified_at' => Carbon::now(),
+            'username'          => 'superadmin',
             'password'          => Hash::make('mcfsystemsuper'),
             'role'              => 1
-            // 'api_token'=>Hash::make(Str::random(80))
         ]);
 
         User::create([
             'name'              => 'IOT',
-            'email'             => 'iot@mcfsystem.com',
-            'email_verified_at' => Carbon::now(),
+            'username'          => 'iot',
             'password'          => Hash::make('mcfsystemiot'),
             'role'              => 3
-            // 'api_token'=>Hash::make(Str::random(80))
         ]);
     }
 }

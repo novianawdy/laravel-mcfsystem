@@ -32,4 +32,5 @@ Route::group(['middleware' => ['auth:api'], 'prefix' => 'logs'], function () {
 Route::group(['middleware' => ['auth:api'], 'prefix' => 'settings'], function () {
     Route::get('/', 'SettingController@index');
     Route::put('/', 'SettingController@update');
+    Route::put('/bulk-update', 'SettingController@bulkUpdate');
 });

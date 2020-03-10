@@ -89,4 +89,40 @@ class SettingController extends Controller
 
         ], 200);
     }
+
+    public function bulkUpdate(Request $request)
+    {
+        DB::beginTransaction();
+
+        foreach ($request->settings as $requested) {
+            $setting = Setting::where('key', $requested["key"])->first();
+            if (!$setting) {
+                return response()->json([
+                    'status'    => 'fail',
+                    'message'   => 'Setting key not found.'
+                ], 422);
+            }
+
+            $setting->value = $requested["value"];
+            $setting->value_text = $requested["value_text"];
+            $setting->value_decimal = $requested["value_decimal"];
+            $setting->save();
+
+            if (!$setting) {
+                DB::rollback();
+                return response()->json([
+                    'status'    => 'fail',
+                    'message'   => 'Something wrong when updating Setting.'
+                ], 422);
+            }
+        }
+
+        DB::commit();
+
+        return response()->json([
+            'status'    => 'success',
+            'result'    => 'Success',
+
+        ], 200);
+    }
 }

@@ -19,9 +19,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('login', 'UserController@login');
 Route::group(['middleware' => ['auth:api'], 'prefix' => 'user'], function () {
+    Route::get('/', 'UserController@index');
     Route::get('logout', 'UserController@logout');
     Route::get('show', 'UserController@show');
     Route::post('register', 'UserController@register')->middleware('role:1');
+    Route::put('/', 'UserController@update');
+    Route::put('/change-password', 'UserController@changePassword');
 });
 
 Route::group(['middleware' => ['auth:api'], 'prefix' => 'logs'], function () {

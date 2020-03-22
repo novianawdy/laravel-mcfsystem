@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Lib\NotificateUser;
 use App\Log;
+use App\Notification;
+use App\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -82,6 +85,10 @@ class LogController extends Controller
 
         DB::beginTransaction();
 
+        $notificate = Setting::where("key", "notificate")->first();
+        $notificate_on = Setting::where("key", "notificate_on_temperature")->first();
+        $last_log = Log::orderBy("created_at", "desc")->first();
+
         $log = Log::create([
             'flow'          => $request->flow,
             'temperature'   => $request->temperature,
@@ -97,6 +104,33 @@ class LogController extends Controller
         }
 
         DB::commit();
+
+        // send notification ketika temperature lebih besar dari nilai limit dan
+        // temperature lebih besar dari temperature sebelumnya
+        if (
+            $notificate->value_decimal == 1 && // ketika setting notifikasi menyala
+            $request->temperature >= $notificate_on->value_decimal && // ketika suhu lebih dari setting batas suhu
+            $request->temperature > $last_log->temperature // ketika suhu terus naik
+        ) {
+            // creating notification
+            $notification = Notification::create([
+                'type'              => NotificateUser::TEMPERATURE,
+                'title'             => 'temperatureReached',
+                'body'              => 'temperatureReachedValue',
+                'body_text'         => 'temperatureReachedValueText',
+                'related_user_id'   => null
+            ]);
+
+            // notification payload
+            // set null agar semua user di client mendapat notifikasi
+            $payload['token'] = null;
+
+            // broadcasting notification
+            $broadcast_notification = new NotificateUser($notification);
+            $broadcast_notification->payload($payload)
+                ->toAll()
+                ->send();
+        }
 
         return response()->json([
             'status'    => 'success',

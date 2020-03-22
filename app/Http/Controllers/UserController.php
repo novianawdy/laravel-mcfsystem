@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Lib\NotificateUser;
+use App\Notification;
 use App\User;
 
 use Illuminate\Http\Request;
@@ -79,6 +81,25 @@ class UserController extends Controller
 
             DB::commit();
 
+            // creating notification
+            $notification = Notification::create([
+                'type'              => NotificateUser::PROFILE_CHANGE,
+                'title'             => 'profileChanged',
+                'body'              => 'profileChangedBy',
+                'body_text'         => 'profileChangedByText',
+                'related_user_id'   => Auth::id()
+            ]);
+
+            // notification payload
+            $payload['token'] = $request->header('Authorization');
+            $payload['user'] = $user;
+
+            // broadcasting notification
+            $broadcast_notification = new NotificateUser($notification);
+            $broadcast_notification->payload($payload)
+                ->toAll()
+                ->send();
+
             return response()->json([
                 'status'    => 'success',
                 'result'    => [
@@ -140,6 +161,24 @@ class UserController extends Controller
             }
 
             DB::commit();
+
+            // creating notification
+            $notification = Notification::create([
+                'type'              => NotificateUser::PASSWORD_CHANGE,
+                'title'             => 'passwordChanged',
+                'body'              => 'passwordChangedBy',
+                'body_text'         => 'passwordChangedByText',
+                'related_user_id'   => Auth::id()
+            ]);
+
+            // notification payload
+            $payload['token'] = $request->header('Authorization');
+
+            // broadcasting notification
+            $broadcast_notification = new NotificateUser($notification);
+            $broadcast_notification->payload($payload)
+                ->toAll()
+                ->send();
 
             return response()->json([
                 'status'    => 'success',

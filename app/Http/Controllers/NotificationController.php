@@ -60,7 +60,7 @@ class NotificationController extends Controller
         $result = NotificationUser::where('user_id', Auth::user()->id)
             ->where('is_read', 0)
             ->update(['is_read' => 1]);
-        if (!$result) {
+        if (!$result && $result != 0) {
             DB::rollback();
             return response()->json([
                 'status'    => 'fail',

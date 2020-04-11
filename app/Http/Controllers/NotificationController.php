@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Notification;
 use App\NotificationUser;
+use App\Lib\NotificateUser;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -16,6 +17,9 @@ class NotificationController extends Controller
     {
         $notifications = $notifications->newQuery();
         $pagination = 5;
+
+        // exclude type HIDE_POPUP
+        $notifications->where("type", "<>", NotificateUser::HIDE_POPUP);
 
         $notifications->with(['notification_user' => function ($notification_user) {
             $notification_user->where('user_id', Auth::user()->id);

@@ -15,6 +15,7 @@ class NotificateUser
     public const PROFILE_CHANGE = 2;
     public const PASSWORD_CHANGE = 3;
     public const SETTING_CHANGE = 4;
+    public const HIDE_POPUP = 5;
 
     protected $notification;
     protected $payload;

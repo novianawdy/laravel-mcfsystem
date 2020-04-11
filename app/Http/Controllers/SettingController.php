@@ -262,6 +262,7 @@ class SettingController extends Controller
     public function bulkUpdateMix(Request $request)
     {
         $setting_type = null;
+        $notification = null;
 
         foreach ($request->settings as $requested) {
             DB::beginTransaction();
@@ -292,7 +293,6 @@ class SettingController extends Controller
             DB::commit();
 
             // creating notificatoin
-            $notification = null;
             if ($setting_type === "global_setting") {
                 $notification = Notification::create([
                     'type'              => NotificateUser::SETTING_CHANGE,
@@ -338,6 +338,22 @@ class SettingController extends Controller
                 ->toAll()
                 ->send();
         }
+
+        $notification = Notification::create([
+            'type'              => NotificateUser::HIDE_POPUP,
+            'title'             => 'hidePopUp',
+            'body'              => 'hidePopUpBy',
+            'body_text'         => 'hidePopUpByText',
+            'related_user_id'   => Auth::id()
+        ]);
+
+        $payload['token'] = $request->header('Authorization');
+
+        // broadcasting notification
+        $broadcast_notification = new NotificateUser($notification);
+        $broadcast_notification->payload($payload)
+            ->toAll()
+            ->send();
 
         return response()->json([
             'status'    => 'success',

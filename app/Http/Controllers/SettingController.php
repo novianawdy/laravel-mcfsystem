@@ -258,4 +258,91 @@ class SettingController extends Controller
 
         ], 200);
     }
+
+    public function bulkUpdateMix(Request $request)
+    {
+        $setting_type = null;
+
+        foreach ($request->settings as $requested) {
+            DB::beginTransaction();
+            $setting = Setting::where('key', $requested["key"])->first();
+            if (!$setting) {
+                DB::rollback();
+                return response()->json([
+                    'status'    => 'fail',
+                    'message'   => 'Setting key not found.'
+                ], 422);
+            }
+
+            $setting_type = $setting->type;
+
+            $setting->value = $requested["value"];
+            $setting->value_text = $requested["value_text"];
+            $setting->value_decimal = $requested["value_decimal"];
+            $setting->save();
+
+            if (!$setting) {
+                DB::rollback();
+                return response()->json([
+                    'status'    => 'fail',
+                    'message'   => 'Something wrong when updating Setting.'
+                ], 422);
+            }
+
+            DB::commit();
+
+            // creating notificatoin
+            $notification = null;
+            if ($setting_type === "global_setting") {
+                $notification = Notification::create([
+                    'type'              => NotificateUser::SETTING_CHANGE,
+                    'title'             => 'settingChanged',
+                    'body'              => 'settingChangedBy',
+                    'body_text'         => 'settingChangedByText',
+                    'related_user_id'   => Auth::id()
+                ]);
+            }
+            if ($setting_type === "mock_setting") {
+                $notification = Notification::create([
+                    'type'              => NotificateUser::TEMPERATURE,
+                    'title'             => 'temperatureChanged',
+                    'body'              => 'temperatureChangedBy',
+                    'body_text'         => 'temperatureChangedByText',
+                    'related_user_id'   => Auth::id()
+                ]);
+            }
+
+            // notification payload
+            $grouped = [];
+            $serialized = [];
+            $settings = Setting::get();
+
+            foreach ($settings as $values) {
+                $grouped[$values->type][] = $values;
+
+                $value = null;
+                if ($values->value) $value = $values->value;
+                else if ($values->value_text) $value = $values->value_text;
+                else if ($values->value_decimal) $value = $values->value_decimal;
+
+                $serialized[$values->key] = $value;
+            }
+
+            $payload['token'] = $request->header('Authorization');
+            $payload['setting'] = $grouped;
+            $payload['setting_serialized'] = $serialized;
+
+            // broadcasting notification
+            $broadcast_notification = new NotificateUser($notification);
+            $broadcast_notification->payload($payload)
+                ->toAll()
+                ->send();
+        }
+
+        return response()->json([
+            'status'    => 'success',
+            'result'    => 'Success',
+
+        ], 200);
+    }
 }

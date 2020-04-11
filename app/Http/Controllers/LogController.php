@@ -110,7 +110,7 @@ class LogController extends Controller
         if (
             $notificate->value_decimal == 1 && // ketika setting notifikasi menyala
             $request->temperature >= $notificate_on->value_decimal && // ketika suhu lebih dari setting batas suhu
-            $request->temperature > $last_log->temperature // ketika suhu terus naik
+            $request->temperature >= $last_log->temperature // ketika suhu terus naik
         ) {
             // creating notification
             $notification = Notification::create([

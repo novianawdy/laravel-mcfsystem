@@ -109,7 +109,7 @@ class NotificationController extends Controller
     {
         $path = public_path('assets/audio/red_alert.mp3');
 
-        return response()->download($path, null, [
+        return response($path, 200, [
             'Content-Type'  => 'audio/mpeg'
         ]);
     }

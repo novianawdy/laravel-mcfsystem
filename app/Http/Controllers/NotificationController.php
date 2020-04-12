@@ -104,4 +104,13 @@ class NotificationController extends Controller
             'result'    => $result
         ], 200);
     }
+
+    public function audio()
+    {
+        $path = public_path('assets/audio/red_alert.mp3');
+
+        return response()->download($path, null, [
+            'Content-Type'  => 'audio/mpeg'
+        ]);
+    }
 }

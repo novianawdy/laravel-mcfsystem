@@ -39,6 +39,7 @@ Route::group(['middleware' => ['auth:api'], 'prefix' => 'settings'], function ()
     Route::put('/bulk-update-mix', 'SettingController@bulkUpdateMix');
 });
 
+Route::get('/notifications/audio', 'NotificationController@audio');
 Route::group(['middleware' => ['auth:api'], 'prefix' => 'notifications'], function () {
     Route::get('/', 'NotificationController@index')->middleware('throttle:360,1');
     Route::get('/mark-all-as-read', 'NotificationController@markAllAsRead');

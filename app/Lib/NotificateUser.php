@@ -16,6 +16,7 @@ class NotificateUser
     public const PASSWORD_CHANGE = 3;
     public const SETTING_CHANGE = 4;
     public const HIDE_POPUP = 5;
+    public const TEMPERATURE_CHANGE = 6;
 
     protected $notification;
     protected $payload;

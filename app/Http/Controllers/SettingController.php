@@ -120,7 +120,7 @@ class SettingController extends Controller
         }
         if ($setting_type === "mock_setting") {
             $notification = Notification::create([
-                'type'              => NotificateUser::TEMPERATURE,
+                'type'              => NotificateUser::TEMPERATURE_CHANGE,
                 'title'             => 'temperatureChanged',
                 'body'              => 'temperatureChangedBy',
                 'body_text'         => 'temperatureChangedByText',
@@ -218,7 +218,7 @@ class SettingController extends Controller
         }
         if ($setting_type === "mock_setting") {
             $notification = Notification::create([
-                'type'              => NotificateUser::TEMPERATURE,
+                'type'              => NotificateUser::TEMPERATURE_CHANGE,
                 'title'             => 'temperatureChanged',
                 'body'              => 'temperatureChangedBy',
                 'body_text'         => 'temperatureChangedByText',
@@ -304,7 +304,7 @@ class SettingController extends Controller
             }
             if ($setting_type === "mock_setting") {
                 $notification = Notification::create([
-                    'type'              => NotificateUser::TEMPERATURE,
+                    'type'              => NotificateUser::TEMPERATURE_CHANGE,
                     'title'             => 'temperatureChanged',
                     'body'              => 'temperatureChangedBy',
                     'body_text'         => 'temperatureChangedByText',

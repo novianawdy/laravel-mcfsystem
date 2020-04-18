@@ -16,7 +16,7 @@ class CreateNotificationsTable extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('channel')->nullable();
-            $table->tinyInteger('type')->nullable()->comment('1=temperature, 2=profile_change, 3=password_change, 4=setting_change, 5=hide_popup');
+            $table->tinyInteger('type')->nullable()->comment('1=temperature, 2=profile_change, 3=password_change, 4=setting_change, 5=hide_popup, 6=temperature_change');
             $table->string('title');
             $table->string('body');
             $table->string('body_text')->nullable();

@@ -47,7 +47,6 @@ class NotificationController extends Controller
         $info = collect([
             "total_unview" => NotificationUser::where('user_id', Auth::user()->id)
                 ->where('is_read', 0)
-                ->where("type", "<>", NotificateUser::HIDE_POPUP)
                 ->count()
         ]);
         $result = $info->merge($result);

@@ -68,7 +68,8 @@ class NotificateUser
         $user_id = $user->id;
 
         $this->notification->notification_users()->create([
-            'user_id' => $user_id
+            'user_id' => $user_id,
+            'is_read' => $this->notification->type === $this::HIDE_POPUP ? 1 : 0
         ]);
 
         // formatting notification for each user
